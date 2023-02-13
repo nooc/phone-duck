@@ -19,7 +19,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tokens")
 public class Token {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

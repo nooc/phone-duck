@@ -26,7 +26,7 @@ All endpoints (REST and WS) except <i>/auth</i> require the <u>X-Authorization</
 |Method|Path          |Description|
 |------|--------------|-----------|
 |GET   |/sub/channels/|Receive channel updates.<br/>Connecting here will show all available channels.|
-|GET   |/sub/chat/    |Receive message updates.<br/>Connecting here will show all available messages for subscribed channels.|
+|GET   |/sub/chat/    |Send and receive message updates.<br/>Connecting here will show all available messages for subscribed channels.|
 
 #### 1.2.1 /sub/chat/
 

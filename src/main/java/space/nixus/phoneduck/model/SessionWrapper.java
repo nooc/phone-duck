@@ -35,4 +35,12 @@ public class SessionWrapper {
             subscriptions.add(channelId);
         }
     }
+
+    public void removeSubscription(Long channelId) {
+        subscriptions.remove(channelId);
+    }
+
+    public boolean hasSubscription() {
+        return !subscriptions.isEmpty();
+    }
 }
