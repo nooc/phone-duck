@@ -157,4 +157,23 @@ public class ChannelHandler extends TextWebSocketHandler {
             }
         }
     }
+
+    /**
+     * Remove subscriptions for channel.
+     * 
+     * @param channelId
+     */
+    public void channelRemoved(long channelId) {
+        for(var key : sessions.keySet()) {
+            var wrapper = sessions.get(key);
+            wrapper.removeSubscription(channelId);
+            if(!wrapper.hasSubscription()) {
+                try {
+                    wrapper.getSession().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
