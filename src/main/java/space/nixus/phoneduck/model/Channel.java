@@ -16,7 +16,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "channels")
 public class Channel {
     public static final long INFO_CHANNEL = 1;
 

@@ -17,6 +17,6 @@ public interface TokenRepository extends JpaRepository<Token,Long> {
     Token getReferenceByToken(String tokenValue);
 
     @Modifying
-    @Query(value = "DELETE FROM tokens WHERE expires <= :time_now", nativeQuery = true)
-    void deleteAllExpired(@Param("time_now") Long timeNow);
+    @Query("DELETE FROM Token t WHERE t.expires <= :now")
+    void deleteAllExpired(@Param("now") Long now);
 }

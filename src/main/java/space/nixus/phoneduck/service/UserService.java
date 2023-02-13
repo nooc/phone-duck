@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import space.nixus.phoneduck.model.Token;
-import space.nixus.phoneduck.model.UserPass;
 import space.nixus.phoneduck.model.PhoneduckUser;
 import space.nixus.phoneduck.repository.UserRepository;
 import space.nixus.phoneduck.repository.TokenRepository;

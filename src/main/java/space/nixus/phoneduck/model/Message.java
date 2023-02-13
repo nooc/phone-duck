@@ -16,7 +16,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "messages")
 public class Message {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

@@ -22,10 +22,11 @@ public class PhoneduckApplication {
     public void handleReadyEvent(ApplicationReadyEvent event) {
         
         // add test accounts if id 1 not in db
-        userRepo.saveAllAndFlush(List.of(
-            new PhoneduckUser(1L,"admin","Admin","admin",true),
-            new PhoneduckUser(2L,"user","User","user",false)
-        ));
-
+        if(userRepo.getReferenceByUsername("admin")==null) {
+            userRepo.save(new PhoneduckUser(null,"admin","Admin","admin",true));
+        }
+        if(userRepo.getReferenceByUsername("user")==null) {
+            userRepo.save(new PhoneduckUser(null,"user","User","user",false));
+        }
     }
 }
