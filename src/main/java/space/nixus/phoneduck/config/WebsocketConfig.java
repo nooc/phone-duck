@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import space.nixus.phoneduck.handler.ChannelHandler;
-import space.nixus.phoneduck.handler.RadioHandler;
+import space.nixus.phoneduck.components.ChannelHandler;
+import space.nixus.phoneduck.components.RadioHandler;
 
 @Configuration
 @EnableWebSocket

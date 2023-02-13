@@ -36,8 +36,15 @@ public class RadioService {
         return channelRepository.save(channel);
     }
 
-    public Channel getChannel(long channelId) {
+    /**
+     * Get channel by id.
+     * @param channelId channel id
+     * @return channel instance
+     * @throws ChannelNotFoundException
+     */
+    public Channel getChannel(long channelId) throws ChannelNotFoundException {
         var opt = channelRepository.findById(channelId);
+        if(!opt.isPresent()) { throw new ChannelNotFoundException(channelId); }
         return opt.get();
     }
 

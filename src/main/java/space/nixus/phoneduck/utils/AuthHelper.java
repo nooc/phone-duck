@@ -1,6 +1,8 @@
 package space.nixus.phoneduck.utils;
 
-import space.nixus.phoneduck.error.AuthenticationException;
+import org.springframework.web.socket.WebSocketSession;
+import space.nixus.phoneduck.config.ApplicationConfig;
+import space.nixus.phoneduck.error.UnauthorizedException;
 import space.nixus.phoneduck.model.PhoneduckUser;
 import space.nixus.phoneduck.service.UserService;
 
@@ -12,14 +14,15 @@ public class AuthHelper {
      * 
      * @param userService
      * @param authorization
-     * @throws AuthenticationException
+     * @throws UnauthorizedException
      * @return PhoneduckUser
      */
-    public static PhoneduckUser checkAuth(UserService userService, String authorization) throws AuthenticationException {
-        if(authorization.startsWith("Bearer ")) {
-            var tokenValue = authorization.substring(7);
-            return userService.getUserByToken(tokenValue);
-        }
-        throw new AuthenticationException();
+    public static PhoneduckUser checkAuth(UserService userService, String authorization) throws UnauthorizedException {
+        return userService.getUserByToken(authorization);
+    }
+
+    public static PhoneduckUser checkAuth(UserService userService, WebSocketSession session) throws UnauthorizedException {
+        var headers = session.getHandshakeHeaders();
+        return checkAuth(userService, headers.getFirst(ApplicationConfig.AUTH_HEADER));
     }
 }

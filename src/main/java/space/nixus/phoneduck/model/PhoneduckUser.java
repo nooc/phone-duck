@@ -27,7 +27,7 @@ public class PhoneduckUser {
     private String username;
 
     @Column(nullable = false)
-    private String displayName;
+    private String name;
 
     @Column
     private String password;

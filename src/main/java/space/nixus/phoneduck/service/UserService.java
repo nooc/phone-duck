@@ -9,7 +9,7 @@ import space.nixus.phoneduck.model.UserPass;
 import space.nixus.phoneduck.model.PhoneduckUser;
 import space.nixus.phoneduck.repository.UserRepository;
 import space.nixus.phoneduck.repository.TokenRepository;
-import space.nixus.phoneduck.error.AuthenticationException;
+import space.nixus.phoneduck.error.UnauthorizedException;
 
 /**
  * User service for 
@@ -44,18 +44,20 @@ public class UserService {
      * @param username
      * @param password
      * @return Token
-     * @throws AuthenticationException
+     * @throws UnauthorizedException
      */
-    public Token createToken(String username, String password) throws AuthenticationException{
+    public Token createToken(String username, String password) throws UnauthorizedException {
         var user = userRepository.getReferenceByUsername(username);
-        var passwordHash = password; // TODO encode to hash
+        // NOTE: Normally we would compare password hashes,
+        // but right now this is plain for simplicity.
+        var passwordHash = password;
         if(user != null && user.getPassword().equals(passwordHash)) {
             var tokenValue = UUID.randomUUID().toString();
             var token = new Token(null, user.getId(), tokenValue, Instant.now().toEpochMilli() + EXPIRE_OFFSET);
             tokenRepository.save(token);
             return token;
         }
-        throw new AuthenticationException();
+        throw new UnauthorizedException();
     }
 
     /**
@@ -63,13 +65,13 @@ public class UserService {
      * 
      * @param tokenValue
      * @return Token
-     * @throws AuthenticationException
+     * @throws UnauthorizedException
      */
-    public Token getToken(String tokenValue) throws AuthenticationException {
+    public Token getToken(String tokenValue) throws UnauthorizedException {
         var now = Instant.now().toEpochMilli();
         var token = tokenRepository.getReferenceByToken(tokenValue);
         if(token == null || token.getExpires() <= now) {
-            throw new AuthenticationException();
+            throw new UnauthorizedException();
         }
         return token;
     }
@@ -89,10 +91,10 @@ public class UserService {
      * 
      * @param tokenValue
      * @return
-     * @throws AuthenticationException
+     * @throws UnauthorizedException
      */
-    public PhoneduckUser getUserByToken(String tokenValue) throws AuthenticationException {
+    public PhoneduckUser getUserByToken(String tokenValue) throws UnauthorizedException {
         var token = getToken(tokenValue);
-        return userRepository.getReferenceById(token.getId());
+        return userRepository.getReferenceById(token.getUserId());
     }
 }

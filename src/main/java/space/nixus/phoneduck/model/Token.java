@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * User api token.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

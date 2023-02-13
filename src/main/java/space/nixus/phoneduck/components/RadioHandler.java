@@ -1,4 +1,4 @@
-package space.nixus.phoneduck.handler;
+package space.nixus.phoneduck.components;
 
 import java.io.IOException;
 import java.util.Map;
@@ -12,17 +12,25 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import space.nixus.phoneduck.model.Channel;
+import space.nixus.phoneduck.model.SessionWrapper;
 import space.nixus.phoneduck.model.SimpleChannel;
 import space.nixus.phoneduck.service.RadioService;
+import space.nixus.phoneduck.service.UserService;
+import space.nixus.phoneduck.utils.AuthHelper;
 
-
+/**
+ * Handle radio connectio.
+ */
 @Component
 public class RadioHandler extends TextWebSocketHandler {
 
     @Autowired
     private RadioService radioService;
-
-    private final Map<String,WebSocketSession> sessions;
+    @Autowired
+    private UserService userService;
+    // map of sessions
+    private final Map<String, SessionWrapper> sessions;
+    // json converter
     private final ObjectMapper mapper;
 
     public RadioHandler() {
@@ -32,7 +40,10 @@ public class RadioHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        sessions.put(session.getId(), session);
+        // check authorization
+        var user = AuthHelper.checkAuth(userService, session);
+        var wrapper = new SessionWrapper(session, user);
+        sessions.put(session.getId(), wrapper);
         dumpChannels(session);
     }
 
@@ -40,13 +51,12 @@ public class RadioHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status)
             throws Exception {
         sessions.remove(session.getId());
-        super.afterConnectionClosed(session, status);
     }
 
     /**
      * Announce channel.
      * 
-     * @param notifications
+     * @param channel
      * @throws IOException
      */
     public void announce(Channel channel) throws IOException, JsonProcessingException {
@@ -55,7 +65,7 @@ public class RadioHandler extends TextWebSocketHandler {
         // iterate all connections
         for (var target : sessions.values()) {
             // send to info channel
-            target.sendMessage(payload);
+            target.getSession().sendMessage(payload);
         }
     }
 

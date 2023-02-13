@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import space.nixus.phoneduck.model.SimpleToken;
 import space.nixus.phoneduck.model.UserPass;
 import space.nixus.phoneduck.service.UserService;
-import space.nixus.phoneduck.error.AuthenticationException;
+import space.nixus.phoneduck.error.UnauthorizedException;
 
 @RestController
 public class AuthController {
@@ -16,7 +16,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/auth")
-    SimpleToken authenticate(@RequestBody UserPass login) throws AuthenticationException {
+    SimpleToken requestToken(@RequestBody UserPass login) throws UnauthorizedException {
         return new SimpleToken(userService.createToken(login.getUser(), login.getPass()));
     }
 }
