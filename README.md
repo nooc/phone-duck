@@ -12,6 +12,8 @@ The root adress is [http://localhost:8080/](http://localhost:8080/)
 
 All endpoints (REST and WS) except <i>/auth</i> require the <u>X-Authorization</u> header to be set to the token value gotten from <i>/auth</i> result. Check [swagger ui](#usage).
 
+Test users are **admin:admin** and **user:user**.
+
 ### 1.1 REST Endpoints
 
 |Method|Path          |Description|
